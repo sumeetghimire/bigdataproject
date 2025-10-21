@@ -1,0 +1,9 @@
+name,country,extinction_likelihood,last_speaker_year,language_family
+Ainu,Japan,0.9,2008,Ainu
+Cornish,UK,0.3,2010,Celtic
+Manx,UK,0.1,2010,Celtic
+Livonian,Latvia,1.0,2013,Baltic
+Ubykh,Turkey,1.0,1992,Northwest Caucasian
+Dalmatian,Croatia,1.0,1898,Romance
+Tasmanian,Australia,1.0,1905,Tasmanian
+Eyak,USA,1.0,2008,Na-Dene

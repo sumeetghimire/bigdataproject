@@ -1,0 +1,126 @@
+# Configuration file for Language Extinction Risk Prediction Project
+
+# Data sources
+data_sources:
+  glottolog:
+    url: "https://glottolog.org/meta/downloads"
+    files:
+      - "glottolog_languoid.csv.zip"
+      - "languages_and_dialects_geo.csv"
+  
+  elcat:
+    url: "https://scholarspace.manoa.hawaii.edu/items/50a71064-24ac-41fb-8a58-115f9e8b4007"
+    files:
+      - "elcat.sql.gz"
+  
+  unesco:
+    url: "https://en.wal.unesco.org/en"
+    export_format: "csv"
+  
+  our_world_in_data:
+    url: "https://ourworldindata.org/grapher/living-languages"
+    format: "csv"
+  
+  kaggle:
+    dataset: "the-guardian/extinct-languages"
+    format: "csv"
+
+# Model configuration
+models:
+  random_forest:
+    n_estimators: 100
+    max_depth: 20
+    min_samples_split: 5
+    min_samples_leaf: 2
+    random_state: 42
+    class_weight: "balanced"
+  
+  xgboost:
+    n_estimators: 100
+    max_depth: 6
+    learning_rate: 0.1
+    random_state: 42
+    eval_metric: "mlogloss"
+  
+  neural_network:
+    hidden_layers: [128, 64, 32]
+    dropout_rate: 0.3
+    activation: "relu"
+    optimizer: "adam"
+    learning_rate: 0.001
+    epochs: 100
+    batch_size: 32
+    validation_split: 0.2
+  
+  logistic_regression:
+    random_state: 42
+    max_iter: 1000
+    class_weight: "balanced"
+
+# Feature engineering
+feature_engineering:
+  derived_features:
+    - "speaker_density"
+    - "transmission_rate"
+    - "geographic_isolation_index"
+    - "economic_pressure_index"
+    - "policy_support_score"
+    - "vitality_trajectory"
+    - "language_family_risk"
+  
+  interaction_features:
+    - "speakers_x_transmission"
+    - "education_x_official_status"
+    - "road_density_x_remoteness"
+
+# Endangerment scales mapping
+endangerment_scales:
+  unesco:
+    safe: 0
+    vulnerable: 1
+    definitely_endangered: 2
+    severely_endangered: 3
+    critically_endangered: 4
+    extinct: 5
+  
+  lei:
+    min_score: 0
+    max_score: 100
+    thresholds:
+      safe: 80
+      vulnerable: 60
+      definitely_endangered: 40
+      severely_endangered: 20
+      critically_endangered: 5
+      extinct: 0
+
+# Visualization settings
+visualization:
+  color_scheme:
+    safe: "#2E8B57"  # Sea Green
+    vulnerable: "#FFD700"  # Gold
+    definitely_endangered: "#FF8C00"  # Dark Orange
+    severely_endangered: "#FF4500"  # Orange Red
+    critically_endangered: "#DC143C"  # Crimson
+    extinct: "#8B0000"  # Dark Red
+  
+  map_settings:
+    center_lat: 20
+    center_lon: 0
+    zoom_start: 2
+    tiles: "OpenStreetMap"
+
+# Performance targets
+performance_targets:
+  accuracy_threshold: 0.85
+  f1_threshold: 0.80
+  precision_threshold: 0.75
+  recall_threshold: 0.75
+
+# File paths
+paths:
+  data_dir: "data"
+  models_dir: "models"
+  results_dir: "results"
+  visualizations_dir: "visualizations"
+  logs_dir: "logs"
