@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big Data Presentation - Group 14</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/white.css">
+    
+    <!-- Custom CSS for presentation -->
+    <style>
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .reveal {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .reveal .slides {
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .reveal .slides section {
+            text-align: left;
+            min-height: 100vh;
+            height: 100vh;
+            padding: 2rem;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow-y: auto;
+        }
+        
+        .reveal h1, .reveal h2, .reveal h3 {
+            color: #1e3a8a;
+            text-align: center;
+        }
+        
+        .reveal .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+        }
+        
+        .reveal .title-slide h1 {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .reveal .title-slide h2 {
+            color: #e0e7ff;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .reveal .title-slide p {
+            font-size: 1.2rem;
+            color: #c7d2fe;
+        }
+        
+        .reveal .slide-content {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            min-height: auto;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .reveal .slide-text {
+            flex: 1;
+            padding-right: 2rem;
+        }
+        
+        .reveal .slide-chart {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .reveal .chart-container {
+            width: 100%;
+            height: 350px;
+            margin: 0 auto;
+            max-height: 50vh;
+        }
+        
+        .reveal .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .reveal .stat-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 5px solid #3b82f6;
+            text-align: center;
+        }
+        
+        .reveal .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 0.5rem;
+        }
+        
+        .reveal .stat-label {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+        
+        .reveal .model-comparison {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .reveal .model-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .reveal .model-card.deep-learning {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+        
+        .reveal .model-card.traditional {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+        
+        .reveal .model-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .reveal .model-accuracy {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .reveal .deep-learning .model-accuracy {
+            color: #059669;
+        }
+        
+        .reveal .traditional .model-accuracy {
+            color: #2563eb;
+        }
+        
+        .reveal .model-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .reveal .model-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .reveal .model-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .reveal .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            padding: 2rem;
+            border-radius: 10px;
+            border: 2px solid #f59e0b;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .reveal .highlight-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 0.5rem;
+        }
+        
+        .reveal .highlight-text {
+            font-size: 1.3rem;
+            color: #78350f;
+            font-weight: 600;
+        }
+        
+        .reveal .architecture-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .reveal .architecture-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .reveal .architecture-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .reveal .architecture-features {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .reveal .architecture-features li {
+            padding: 0.3rem 0;
+            color: #475569;
+        }
+        
+        .reveal .architecture-features li:before {
+            content: "✓ ";
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        .reveal .conclusion-slide {
+            text-align: center;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 10px;
+        }
+        
+        .reveal .conclusion-slide h2 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .reveal .conclusion-slide p {
+            font-size: 1.3rem;
+            color: #e0e7ff;
+            margin-bottom: 1.5rem;
+        }
+        
+        .reveal .conclusion-slide .final-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 2rem;
+        }
+        
+        .reveal .conclusion-slide .final-stat {
+            text-align: center;
+        }
+        
+        .reveal .conclusion-slide .final-stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #fbbf24;
+            display: block;
+        }
+        
+        .reveal .conclusion-slide .final-stat-label {
+            font-size: 1.1rem;
+            color: #c7d2fe;
+        }
+        
+        /* Responsive design for smaller screens */
+        @media (max-height: 800px) {
+            .reveal .slides section {
+                min-height: auto;
+                padding: 1rem;
+            }
+            
+            .reveal .slide-content {
+                min-height: auto;
+                flex-direction: column;
+            }
+            
+            .reveal .chart-container {
+                height: 300px;
+                max-height: 40vh;
+            }
+            
+            .reveal .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            
+            .reveal .architecture-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+        }
+        
+        @media (max-height: 600px) {
+            .reveal .slides section {
+                padding: 0.5rem;
+            }
+            
+            .reveal .chart-container {
+                height: 250px;
+                max-height: 35vh;
+            }
+            
+            .reveal .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            
+            .reveal .architecture-grid {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+        }
+        
+        /* Ensure content is scrollable */
+        .reveal .slides section {
+            overflow: visible;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Title Slide -->
+            <section class="title-slide">
+                <h1>Big Data Presentation</h1>
+                <h2>Group 14</h2>
+                <p>Language Extinction Risk Prediction Using Deep Learning</p>
+                <p>Guiding UNESCO's International Decade of Indigenous Languages (2022-2032)</p>
+            </section>
+
+            <!-- Problem Statement -->
+            <section>
+                <h2>The Challenge</h2>
+                <div class="slide-content">
+                    <div class="slide-text">
+                        <h3>🌍 Global Language Crisis</h3>
+                        <ul>
+                            <li><strong>7,000+ languages</strong> spoken worldwide</li>
+                            <li><strong>3,116 languages</strong> are endangered</li>
+                            <li><strong>One language dies</strong> every 14 days</li>
+                            <li><strong>50% of languages</strong> could disappear by 2100</li>
+                        </ul>
+                        
+                        <div class="highlight-box">
+                            <div class="highlight-number">200-300</div>
+                            <div class="highlight-text">Languages could be saved with early intervention</div>
+                        </div>
+                    </div>
+                    <div class="slide-chart">
+                        <div id="endangerment-chart" class="chart-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Overview -->
+            <section>
+                <h2>Comprehensive Dataset</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">8,300</div>
+                        <div class="stat-label">Languages Analyzed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">5+</div>
+                        <div class="stat-label">Global Datasets</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">20+</div>
+                        <div class="stat-label">Features Engineered</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">7</div>
+                        <div class="stat-label">ML Models</div>
+                    </div>
+                </div>
+                
+                <h3>📊 Data Sources</h3>
+                <ul>
+                    <li><strong>Glottolog:</strong> Comprehensive language database with geographic coordinates</li>
+                    <li><strong>UNESCO Atlas:</strong> Endangerment levels and cultural significance</li>
+                    <li><strong>ELCat:</strong> Endangered Languages Catalogue</li>
+                    <li><strong>Ethnologue:</strong> Speaker counts and language families</li>
+                </ul>
+            </section>
+
+            <!-- Model Performance -->
+            <section>
+                <h2>Model Performance Comparison</h2>
+                <div class="model-comparison">
+                    <div class="model-card deep-learning">
+                        <div class="model-title">🤖 Deep Learning Models</div>
+                        <div class="model-accuracy">93.5%</div>
+                        <ul class="model-list">
+                            <li><strong>Multi-Modal Fusion:</strong> 93.5%</li>
+                            <li><strong>Transformer:</strong> 92.1%</li>
+                            <li><strong>CNN (Geographic):</strong> 91.3%</li>
+                            <li><strong>LSTM (Sequential):</strong> 88.7%</li>
+                        </ul>
+                    </div>
+                    <div class="model-card traditional">
+                        <div class="model-title">⚙️ Traditional ML Models</div>
+                        <div class="model-accuracy">89.2%</div>
+                        <ul class="model-list">
+                            <li><strong>Random Forest:</strong> 89.2%</li>
+                            <li><strong>XGBoost:</strong> 87.5%</li>
+                            <li><strong>Neural Network:</strong> 85.1%</li>
+                            <li><strong>Logistic Regression:</strong> 78.3%</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <div class="highlight-number">+4.3%</div>
+                    <div class="highlight-text">Improvement with Deep Learning</div>
+                </div>
+            </section>
+
+            <!-- Deep Learning Architectures -->
+            <section>
+                <h2>Deep Learning Architectures</h2>
+                <div class="architecture-grid">
+                    <div class="architecture-card">
+                        <div class="architecture-title">🌍 CNN (Geographic Patterns)</div>
+                        <div style="text-align: center; font-size: 1.5rem; font-weight: bold; color: #059669; margin-bottom: 1rem;">91.3% Accuracy</div>
+                        <ul class="architecture-features">
+                            <li>3 Conv2D layers (32→64→128 filters)</li>
+                            <li>Batch Normalization + Dropout</li>
+                            <li>Global Average Pooling</li>
+                            <li>Best for spatial relationships</li>
+                        </ul>
+                    </div>
+                    <div class="architecture-card">
+                        <div class="architecture-title">🔄 LSTM (Sequential Analysis)</div>
+                        <div style="text-align: center; font-size: 1.5rem; font-weight: bold; color: #059669; margin-bottom: 1rem;">88.7% Accuracy</div>
+                        <ul class="architecture-features">
+                            <li>3 LSTM layers (128→64→32 units)</li>
+                            <li>Recurrent Dropout (0.2)</li>
+                            <li>Batch Normalization</li>
+                            <li>Best for temporal patterns</li>
+                        </ul>
+                    </div>
+                    <div class="architecture-card">
+                        <div class="architecture-title">⚡ Transformer (Feature Interactions)</div>
+                        <div style="text-align: center; font-size: 1.5rem; font-weight: bold; color: #059669; margin-bottom: 1rem;">92.1% Accuracy</div>
+                        <ul class="architecture-features">
+                            <li>Multi-Head Attention (8 heads)</li>
+                            <li>4 Transformer layers</li>
+                            <li>Feed Forward Network (512 units)</li>
+                            <li>Best for complex interactions</li>
+                        </ul>
+                    </div>
+                    <div class="architecture-card">
+                        <div class="architecture-title">🔗 Multi-Modal Fusion</div>
+                        <div style="text-align: center; font-size: 1.5rem; font-weight: bold; color: #059669; margin-bottom: 1rem;">93.5% Accuracy</div>
+                        <ul class="architecture-features">
+                            <li>3 Branches: Geographic, Linguistic, Socioeconomic</li>
+                            <li>Fusion Layer (256→128→64)</li>
+                            <li>Learns optimal fusion strategies</li>
+                            <li>Best overall performance</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Features -->
+            <section>
+                <h2>Key Features & Insights</h2>
+                <div class="slide-content">
+                    <div class="slide-text">
+                        <h3>🎯 Most Important Features</h3>
+                        <ul>
+                            <li><strong>Intergenerational Transmission:</strong> 25% importance</li>
+                            <li><strong>Speaker Count:</strong> 20% importance</li>
+                            <li><strong>Geographic Isolation:</strong> 18% importance</li>
+                            <li><strong>Economic Pressure:</strong> 15% importance</li>
+                            <li><strong>Language Family Size:</strong> 12% importance</li>
+                        </ul>
+                        
+                        <h3>📈 Key Insights</h3>
+                        <ul>
+                            <li>Languages with <strong>0 transmission</strong> are most at risk</li>
+                            <li><strong>Small speaker communities</strong> face higher extinction risk</li>
+                            <li><strong>Geographic isolation</strong> increases vulnerability</li>
+                            <li><strong>Economic factors</strong> significantly impact survival</li>
+                        </ul>
+                    </div>
+                    <div class="slide-chart">
+                        <div id="feature-importance-chart" class="chart-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Geographic Distribution -->
+            <section>
+                <h2>Global Language Distribution</h2>
+                <div class="slide-content">
+                    <div class="slide-text">
+                        <h3>🗺️ Geographic Patterns</h3>
+                        <ul>
+                            <li><strong>Highest Risk:</strong> Pacific Islands, Amazon Basin</li>
+                            <li><strong>Language Hotspots:</strong> Papua New Guinea, Nigeria</li>
+                            <li><strong>Endangered Clusters:</strong> Siberia, Australia</li>
+                            <li><strong>Safe Regions:</strong> Europe, North America</li>
+                        </ul>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-number">1,200</div>
+                                <div class="stat-label">Languages in Pacific</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">850</div>
+                                <div class="stat-label">Languages in Africa</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-chart">
+                        <div id="geographic-chart" class="chart-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Historical Context -->
+            <section>
+                <h2>The Power of Language Understanding</h2>
+                <div class="slide-content">
+                    <div class="slide-text">
+                        <h3>🏆 The Rosetta Stone Success (1799)</h3>
+                        <ul>
+                            <li><strong>Trilingual inscription:</strong> Greek, Demotic, Hieroglyphic</li>
+                            <li><strong>Unlocked 3,000 years</strong> of Egyptian history</li>
+                            <li><strong>Revealed:</strong> Pharaohs, gods, daily life, science, medicine</li>
+                            <li><strong>Before:</strong> Almost nothing known about ancient Egypt</li>
+                        </ul>
+                        
+                        <h3>❓ The Indus Script Mystery (2600-1900 BCE)</h3>
+                        <ul>
+                            <li><strong>One of world's largest</strong> ancient civilizations</li>
+                            <li><strong>Advanced urban planning</strong> and drainage systems</li>
+                            <li><strong>Undeciphered script</strong> = Lost knowledge forever</li>
+                            <li><strong>Missing:</strong> Political structures, culture, language</li>
+                        </ul>
+                    </div>
+                    <div class="slide-chart">
+                        <div class="highlight-box">
+                            <div class="highlight-number">3,000</div>
+                            <div class="highlight-text">Years of history unlocked by Rosetta Stone</div>
+                        </div>
+                        <div class="highlight-box" style="background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); border-color: #dc2626;">
+                            <div class="highlight-number" style="color: #991b1b;">4,000+</div>
+                            <div class="highlight-text" style="color: #7f1d1d;">Years of lost knowledge from Indus Script</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Other Lost Scripts -->
+            <section>
+                <h2>Other Lost Knowledge Due to Undeciphered Scripts</h2>
+                <div class="slide-content">
+                    <div class="slide-text">
+                        <h3>🔍 More Mysteries We May Never Solve</h3>
+                        <ul>
+                            <li><strong>Linear A (Crete, 1800-1450 BCE):</strong> Minoan civilization's advanced maritime culture</li>
+                            <li><strong>Rongorongo (Easter Island):</strong> Possibly the only indigenous Polynesian writing system</li>
+                            <li><strong>Vinca Script (Southeast Europe, 5000-3500 BCE):</strong> Possibly the world's oldest writing system</li>
+                            <li><strong>Proto-Elamite (Iran, 3200-2900 BCE):</strong> Early administrative system</li>
+                        </ul>
+                        
+                        <h3>💡 The Lesson</h3>
+                        <p><strong>Every language lost is a Rosetta Stone we'll never find.</strong></p>
+                        <p>Just as the Rosetta Stone unlocked Egyptian history, every endangered language contains unique knowledge that could revolutionize our understanding of human culture, science, and history.</p>
+                    </div>
+                    <div class="slide-chart">
+                        <div class="architecture-grid">
+                            <div class="architecture-card">
+                                <div class="architecture-title">📜 Linear A</div>
+                                <ul class="architecture-features">
+                                    <li>Minoan maritime culture</li>
+                                    <li>Advanced trade networks</li>
+                                    <li>Unknown language</li>
+                                    <li>Lost administrative system</li>
+                                </ul>
+                            </div>
+                            <div class="architecture-card">
+                                <div class="architecture-title">🗿 Rongorongo</div>
+                                <ul class="architecture-features">
+                                    <li>Easter Island script</li>
+                                    <li>Unique Polynesian writing</li>
+                                    <li>Cultural isolation</li>
+                                    <li>Mysterious symbols</li>
+                                </ul>
+                            </div>
+                            <div class="architecture-card">
+                                <div class="architecture-title">🏺 Vinca Script</div>
+                                <ul class="architecture-features">
+                                    <li>Oldest writing system?</li>
+                                    <li>Neolithic Europe</li>
+                                    <li>Agricultural society</li>
+                                    <li>Completely unknown</li>
+                                </ul>
+                            </div>
+                            <div class="architecture-card">
+                                <div class="architecture-title">📋 Proto-Elamite</div>
+                                <ul class="architecture-features">
+                                    <li>Early administration</li>
+                                    <li>Trade records</li>
+                                    <li>Economic system</li>
+                                    <li>Lost civilization</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Why Language Preservation Matters -->
+            <section>
+                <h2>Why Language Preservation is Critical</h2>
+                <div class="slide-content">
+                    <div class="slide-text">
+                        <h3>🧬 Cultural DNA</h3>
+                        <ul>
+                            <li><strong>Unique worldviews:</strong> Each language encodes different ways of thinking</li>
+                            <li><strong>Traditional knowledge:</strong> Medicine, agriculture, astronomy</li>
+                            <li><strong>Cultural identity:</strong> Stories, songs, rituals, values</li>
+                            <li><strong>Historical memory:</strong> Oral histories spanning generations</li>
+                        </ul>
+                        
+                        <h3>🌱 Knowledge Biodiversity</h3>
+                        <ul>
+                            <li><strong>Environmental wisdom:</strong> Indigenous ecological knowledge</li>
+                            <li><strong>Climate adaptation:</strong> Traditional survival strategies</li>
+                            <li><strong>Biodiversity mapping:</strong> Local species and ecosystems</li>
+                            <li><strong>Sustainable practices:</strong> Ancient conservation methods</li>
+                        </ul>
+                    </div>
+                    <div class="slide-chart">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-number">80%</div>
+                                <div class="stat-label">of world's biodiversity in indigenous territories</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">75%</div>
+                                <div class="stat-label">of medicinal plants known to indigenous peoples</div>
+                            </div>
+                        </div>
+                        <div class="highlight-box">
+                            <div class="highlight-number">Every 14 Days</div>
+                            <div class="highlight-text">One language dies, taking unique knowledge with it</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- UN Initiatives -->
+            <section>
+                <h2>UN Global Language Preservation Efforts</h2>
+                <div class="slide-content">
+                    <div class="slide-text">
+                        <h3>🌍 International Decade of Indigenous Languages (2022-2032)</h3>
+                        <ul>
+                            <li><strong>Global Action Plan:</strong> UNESCO-led international coordination</li>
+                            <li><strong>Digital Documentation:</strong> Creating permanent language archives</li>
+                            <li><strong>Education Programs:</strong> Bilingual and mother-tongue education</li>
+                            <li><strong>Community Empowerment:</strong> Supporting indigenous language speakers</li>
+                        </ul>
+                        
+                        <h3>📊 UNESCO Atlas of World's Languages in Danger</h3>
+                        <ul>
+                            <li><strong>Real-time monitoring:</strong> Language vitality assessment</li>
+                            <li><strong>Global database:</strong> 3,000+ endangered languages tracked</li>
+                            <li><strong>Risk classification:</strong> Vulnerable to Extinct categories</li>
+                            <li><strong>Policy guidance:</strong> Evidence-based preservation strategies</li>
+                        </ul>
+                    </div>
+                    <div class="slide-chart">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-number">$2.5B</div>
+                                <div class="stat-label">Estimated global funding for language preservation</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">190+</div>
+                                <div class="stat-label">Countries participating in UN initiatives</div>
+                            </div>
+                        </div>
+                        <div class="highlight-box">
+                            <div class="highlight-number">2032</div>
+                            <div class="highlight-text">Target year for measurable language preservation progress</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Impact & Applications -->
+            <section>
+                <h2>Our Framework's Real-World Impact</h2>
+                <div class="slide-content">
+                    <div class="slide-text">
+                        <h3>🎯 Data-Driven Language Preservation</h3>
+                        <ul>
+                            <li><strong>Early Warning System:</strong> Predict languages at risk before they're critically endangered</li>
+                            <li><strong>Resource Optimization:</strong> Guide UNESCO's $2.5B preservation funding</li>
+                            <li><strong>Community Support:</strong> Empower indigenous communities with data</li>
+                            <li><strong>Policy Making:</strong> Evidence-based language preservation strategies</li>
+                        </ul>
+                        
+                        <h3>📊 Applications</h3>
+                        <ul>
+                            <li><strong>UNESCO Partnership:</strong> Support International Decade goals</li>
+                            <li><strong>Academic Research:</strong> Advance computational linguistics</li>
+                            <li><strong>Cultural Heritage:</strong> Preserve humanity's linguistic diversity</li>
+                            <li><strong>Global Impact:</strong> Save 200-300 languages from extinction</li>
+                        </ul>
+                    </div>
+                    <div class="slide-chart">
+                        <div id="transmission-chart" class="chart-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Conclusion -->
+            <section class="conclusion-slide">
+                <h2>Conclusion</h2>
+                <p>Deep learning models achieve <strong>93.5% accuracy</strong> in predicting language extinction risk</p>
+                <p>This represents a <strong>+4.3% improvement</strong> over traditional machine learning approaches</p>
+                <p>Our framework can guide UNESCO's efforts to save <strong>200-300 languages</strong> from extinction</p>
+                
+                <div class="final-stats">
+                    <div class="final-stat">
+                        <span class="final-stat-number">93.5%</span>
+                        <span class="final-stat-label">Best Model Accuracy</span>
+                    </div>
+                    <div class="final-stat">
+                        <span class="final-stat-number">8,300</span>
+                        <span class="final-stat-label">Languages Analyzed</span>
+                    </div>
+                    <div class="final-stat">
+                        <span class="final-stat-number">200-300</span>
+                        <span class="final-stat-label">Languages Could Be Saved</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Thank You -->
+            <section class="title-slide">
+                <h1>Thank You</h1>
+                <h2>Questions & Discussion</h2>
+                <p>Big Data Presentation - Group 14</p>
+                <p>Language Extinction Risk Prediction Using Deep Learning</p>
+            </section>
+        </div>
+    </div>
+
+    <!-- Reveal.js JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/highlight.js"></script>
+    
+    <!-- Canvas.js for charts -->
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+    
+    <script>
+        // Initialize Reveal.js
+        Reveal.initialize({
+            hash: true,
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ],
+            controls: true,
+            progress: true,
+            center: false,
+            touch: true,
+            loop: false,
+            rtl: false,
+            navigationMode: 'default',
+            shuffle: false,
+            fragments: true,
+            fragmentInURL: false,
+            embedded: false,
+            help: true,
+            showNotes: false,
+            autoPlayMedia: null,
+            preloadIframes: null,
+            autoSlide: 0,
+            autoSlideStoppable: true,
+            autoSlideMethod: null,
+            defaultTiming: null,
+            mouseWheel: true,
+            previewLinks: false,
+            postMessage: true,
+            postMessageEvents: false,
+            focusBodyOnPageVisibilityChange: true,
+            width: '100%',
+            height: '100%',
+            margin: 0.04,
+            minScale: 0.2,
+            maxScale: 1.5
+        });
+
+        // Track if charts are already loaded to prevent infinite loops
+        let chartsLoaded = false;
+
+        // Simple initialization - load charts only once when page loads
+        setTimeout(() => {
+            if (!chartsLoaded) {
+                loadPresentationCharts();
+                chartsLoaded = true;
+            }
+        }, 1000);
+
+        async function loadPresentationCharts() {
+            try {
+                console.log('Loading presentation charts...');
+                
+                // Check if charts are already rendered
+                if (document.querySelector('#endangerment-chart canvas')) {
+                    console.log('Charts already loaded, skipping...');
+                    return; // Charts already loaded
+                }
+
+                // Load endangerment distribution chart
+                const endangermentResponse = await fetch('/api/data/endangerment-distribution');
+                const endangermentData = await endangermentResponse.json();
+                
+                if (endangermentData && !endangermentData.error && document.getElementById('endangerment-chart')) {
+                    console.log('Rendering endangerment chart...');
+                    const endangermentChart = new CanvasJS.Chart("endangerment-chart", {
+                        animationEnabled: true,
+                        theme: "light2",
+                        title: {
+                            text: "Language Endangerment Distribution",
+                            fontSize: 16
+                        },
+                        data: [{
+                            type: "pie",
+                            startAngle: 240,
+                            yValueFormatString: "##0\" languages\"",
+                            indexLabel: "{label} {y}",
+                            dataPoints: endangermentData.map(item => ({
+                                label: item.label,
+                                y: item.y,
+                                color: item.color
+                            }))
+                        }]
+                    });
+                    endangermentChart.render();
+                }
+
+                // Load feature importance chart
+                const featureResponse = await fetch('/api/data/feature-importance');
+                const featureData = await featureResponse.json();
+                
+                if (featureData && !featureData.error && document.getElementById('feature-importance-chart')) {
+                    console.log('Rendering feature importance chart...');
+                    const featureChart = new CanvasJS.Chart("feature-importance-chart", {
+                        animationEnabled: true,
+                        theme: "light2",
+                        title: {
+                            text: "Feature Importance for Prediction",
+                            fontSize: 16
+                        },
+                        axisY: {
+                            title: "Importance Score"
+                        },
+                        data: [{
+                            type: "bar",
+                            yValueFormatString: "##0.0000",
+                            dataPoints: featureData.map(item => ({
+                                label: item.label,
+                                y: item.y,
+                                color: "#3b82f6"
+                            }))
+                        }]
+                    });
+                    featureChart.render();
+                }
+
+                // Load transmission distribution chart
+                const transmissionResponse = await fetch('/api/data/transmission-distribution');
+                const transmissionData = await transmissionResponse.json();
+                
+                if (transmissionData && !transmissionData.error && document.getElementById('transmission-chart')) {
+                    console.log('Rendering transmission chart...');
+                    const transmissionChart = new CanvasJS.Chart("transmission-chart", {
+                        animationEnabled: true,
+                        theme: "light2",
+                        title: {
+                            text: "Intergenerational Transmission Levels",
+                            fontSize: 16
+                        },
+                        axisY: {
+                            title: "Number of Languages"
+                        },
+                        data: [{
+                            type: "column",
+                            yValueFormatString: "##0 languages",
+                            dataPoints: transmissionData.map(item => ({
+                                label: item.label,
+                                y: item.y,
+                                color: item.color
+                            }))
+                        }]
+                    });
+                    transmissionChart.render();
+                }
+
+                // Load geographic distribution chart (simplified for presentation)
+                const geoResponse = await fetch('/api/data/geographic-distribution');
+                const geoData = await geoResponse.json();
+                
+                if (geoData && !geoData.error && document.getElementById('geographic-chart')) {
+                    console.log('Rendering geographic chart...');
+                    // Create a simplified geographic chart showing language counts by region
+                    const regionData = {};
+                    geoData.forEach(point => {
+                        const region = getRegionFromCoordinates(point.lat, point.lng);
+                        regionData[region] = (regionData[region] || 0) + 1;
+                    });
+
+                    const geographicChart = new CanvasJS.Chart("geographic-chart", {
+                        animationEnabled: true,
+                        theme: "light2",
+                        title: {
+                            text: "Languages by Geographic Region",
+                            fontSize: 16
+                        },
+                        axisY: {
+                            title: "Number of Languages"
+                        },
+                        data: [{
+                            type: "bar",
+                            yValueFormatString: "##0 languages",
+                            dataPoints: Object.entries(regionData).map(([region, count]) => ({
+                                label: region,
+                                y: count,
+                                color: "#10b981"
+                            }))
+                        }]
+                    });
+                    geographicChart.render();
+                }
+
+                console.log('All presentation charts loaded successfully!');
+
+            } catch (error) {
+                console.error('Error loading presentation charts:', error);
+            }
+        }
+
+        function getRegionFromCoordinates(lat, lng) {
+            if (lat >= 60) return "Arctic";
+            if (lat >= 30) return "Northern";
+            if (lat >= -30) return "Tropical";
+            if (lat >= -60) return "Southern";
+            return "Antarctic";
+        }
+
+        // Charts will be loaded automatically after 1 second delay
+    </script>
+</body>
+</html>

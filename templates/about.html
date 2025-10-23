@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Language Extinction Prediction Matters - Big Data Presentation for Group 14</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 80px 0;
+            margin-bottom: 60px;
+        }
+        
+        .impact-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .impact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1e40af;
+        }
+        
+        .quote-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 60px 0;
+            margin: 60px 0;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            background: #3b82f6;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 0 0 4px #3b82f6;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 20px;
+            width: 2px;
+            height: calc(100% + 10px);
+            background: #e2e8f0;
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        
+        .culture-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 2rem;
+        }
+        
+        .call-to-action {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 60px 0;
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <div>
+                    <div class="fw-bold">
+                        <i class="fas fa-language me-2"></i>
+                        Big Data Presentation - Group 14
+                    </div>
+                    <small class="text-light opacity-75">Language Extinction Risk Dashboard</small>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">
+                            <i class="fas fa-chart-line me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('presentation') }}">
+                            <i class="fas fa-presentation me-1"></i>Presentation
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('about') }}">
+                            <i class="fas fa-info-circle me-1"></i>Why This Matters
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-3 fw-bold mb-4">
+                        <i class="fas fa-globe-americas me-3"></i>
+                        Why Language Extinction Prediction Matters
+                    </h1>
+                    <p class="lead mb-4">
+                        Every 14 days, a language dies. When a language disappears, we lose more than words—we lose entire worldviews, cultural knowledge, and human diversity. Our AI-powered prediction model helps identify which languages need urgent protection before it's too late.
+                    </p>
+                    <div class="d-flex gap-3">
+                        <a href="{{ url_for('index') }}" class="btn btn-light btn-lg">
+                            <i class="fas fa-chart-line me-2"></i>Explore Dashboard
+                        </a>
+                        <a href="#impact" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-arrow-down me-2"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="fas fa-language" style="font-size: 8rem; opacity: 0.3;"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Statistics -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-12">
+                    <h2 class="display-4 text-gradient mb-3">The Global Language Crisis</h2>
+                    <p class="lead text-muted">Understanding the scale and urgency of language loss</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="stat-number">7,000+</div>
+                        <h5>Languages Worldwide</h5>
+                        <p class="text-muted">Currently spoken across the globe</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="stat-number">3,116</div>
+                        <h5>Endangered Languages</h5>
+                        <p class="text-muted">At risk of extinction</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="stat-number">1 every 14 days</div>
+                        <h5>Language Death Rate</h5>
+                        <p class="text-muted">Languages disappearing forever</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="stat-number">50%</div>
+                        <h5>Could Disappear</h5>
+                        <p class="text-muted">By the end of this century</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why This Matters Section -->
+    <section id="impact" class="py-5 bg-light">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="display-4 text-gradient mb-3">Why This Research Matters</h2>
+                    <p class="lead text-muted">Language extinction affects every aspect of human society</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="card impact-card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="culture-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <h4 class="card-title">Cultural Heritage</h4>
+                            <p class="card-text">
+                                Languages carry unique cultural knowledge, stories, and traditions. When a language dies, 
+                                we lose irreplaceable cultural heritage that has been passed down for generations.
+                            </p>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="fas fa-check text-success me-2"></i>Traditional ecological knowledge</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Oral histories and legends</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Cultural practices and rituals</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Artistic expressions</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card impact-card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="culture-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h4 class="card-title">Scientific Knowledge</h4>
+                            <p class="card-text">
+                                Indigenous languages often contain detailed knowledge about local ecosystems, 
+                                medicinal plants, and environmental patterns that modern science is only beginning to understand.
+                            </p>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="fas fa-check text-success me-2"></i>Medicinal plant knowledge</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Climate adaptation strategies</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Biodiversity conservation</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Sustainable practices</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card impact-card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="culture-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h4 class="card-title">Social Impact</h4>
+                            <p class="card-text">
+                                Language loss affects community identity, mental health, and social cohesion. 
+                                It can lead to cultural disconnection and loss of intergenerational bonds.
+                            </p>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="fas fa-check text-success me-2"></i>Community identity preservation</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Mental health and well-being</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Intergenerational connections</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Social cohesion</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Historical Context Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="display-4 text-gradient mb-3">The Power of Language Understanding</h2>
+                    <p class="lead text-muted">How language preservation unlocks human history and knowledge</p>
+                </div>
+            </div>
+            <div class="row g-4 mb-5">
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-success text-white rounded-circle p-3 me-3">
+                                    <i class="fas fa-scroll"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0">The Rosetta Stone Success</h5>
+                                    <small class="text-muted">1799 - Ancient Egypt</small>
+                                </div>
+                            </div>
+                            <p class="card-text">
+                                The discovery of the Rosetta Stone, containing the same text in Greek, Demotic, and Hieroglyphic scripts, 
+                                unlocked 3,000 years of Egyptian history. Before this breakthrough, we knew almost nothing about ancient Egyptian civilization.
+                            </p>
+                            <div class="mt-3">
+                                <h6 class="text-success">What We Gained:</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success me-2"></i>Complete understanding of Egyptian hieroglyphs</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Access to 3,000 years of historical records</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Knowledge of pharaohs, gods, and daily life</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Understanding of ancient Egyptian science and medicine</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-danger text-white rounded-circle p-3 me-3">
+                                    <i class="fas fa-question-circle"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0">The Indus Script Mystery</h5>
+                                    <small class="text-muted">2600-1900 BCE - Lost Civilization</small>
+                                </div>
+                            </div>
+                            <p class="card-text">
+                                The Indus Valley Civilization was one of the world's largest ancient civilizations, but we understand almost nothing about them 
+                                because their script remains undeciphered. This represents a massive gap in human knowledge.
+                            </p>
+                            <div class="mt-3">
+                                <h6 class="text-danger">What We're Missing:</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-times text-danger me-2"></i>No understanding of their language or culture</li>
+                                    <li><i class="fas fa-times text-danger me-2"></i>Unknown political and social structures</li>
+                                    <li><i class="fas fa-times text-danger me-2"></i>Lost knowledge of their advanced urban planning</li>
+                                    <li><i class="fas fa-times text-danger me-2"></i>Mystery of their sophisticated drainage systems</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="alert alert-info border-0 shadow-sm">
+                        <div class="row align-items-center">
+                            <div class="col-md-2 text-center">
+                                <i class="fas fa-lightbulb" style="font-size: 3rem; color: #1e40af;"></i>
+                            </div>
+                            <div class="col-md-10">
+                                <h5 class="alert-heading">The Lesson: Every Language Lost is a Rosetta Stone We'll Never Find</h5>
+                                <p class="mb-0">
+                                    Just as the Rosetta Stone unlocked Egyptian history, every endangered language contains unique knowledge 
+                                    that could revolutionize our understanding of human culture, science, and history. When a language dies, 
+                                    we lose the key to unlocking that knowledge forever.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Additional Undeciphered Scripts -->
+            <div class="row">
+                <div class="col-12">
+                    <h4 class="text-center mb-4">Other Lost Knowledge Due to Undeciphered Scripts</h4>
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="card border-warning">
+                        <div class="card-body text-center p-3">
+                            <h6 class="card-title text-warning">Linear A Script</h6>
+                            <p class="card-text small">Minoan civilization (Crete, 1800-1450 BCE) - Advanced maritime culture, unknown language</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-warning">
+                        <div class="card-body text-center p-3">
+                            <h6 class="card-title text-warning">Rongorongo</h6>
+                            <p class="card-text small">Easter Island (Rapa Nui) - Unique script, possibly the only indigenous writing system in Polynesia</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-warning">
+                        <div class="card-body text-center p-3">
+                            <h6 class="card-title text-warning">Vinca Script</h6>
+                            <p class="card-text small">Southeast Europe (5000-3500 BCE) - Possibly the world's oldest writing system, completely unknown</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real-World Impact Examples -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="display-4 text-gradient mb-3">Real-World Impact Examples</h2>
+                    <p class="lead text-muted">How language preservation has made a difference</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-success text-white rounded-circle p-3 me-3">
+                                    <i class="fas fa-leaf"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0">Medicinal Knowledge Recovery</h5>
+                                    <small class="text-muted">Amazon Rainforest</small>
+                                </div>
+                            </div>
+                            <p class="card-text">
+                                The preservation of Quechua language led to the recovery of traditional medicinal knowledge, 
+                                helping modern medicine discover new treatments for diseases like malaria and cancer.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-info text-white rounded-circle p-3 me-3">
+                                    <i class="fas fa-thermometer-half"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0">Climate Change Adaptation</h5>
+                                    <small class="text-muted">Arctic Regions</small>
+                                </div>
+                            </div>
+                            <p class="card-text">
+                                Inuktitut language preservation has helped Arctic communities maintain traditional 
+                                knowledge about ice patterns and weather prediction, crucial for climate adaptation.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-warning text-white rounded-circle p-3 me-3">
+                                    <i class="fas fa-seedling"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0">Agricultural Innovation</h5>
+                                    <small class="text-muted">Sub-Saharan Africa</small>
+                                </div>
+                            </div>
+                            <p class="card-text">
+                                Yoruba language preservation has maintained traditional farming techniques that 
+                                are now being used to develop drought-resistant crops for food security.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-primary text-white rounded-circle p-3 me-3">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0">Educational Success</h5>
+                                    <small class="text-muted">New Zealand</small>
+                                </div>
+                            </div>
+                            <p class="card-text">
+                                Maori language revitalization programs have improved educational outcomes and 
+                                cultural pride among indigenous youth, reducing dropout rates by 40%.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="display-4 text-gradient mb-3">The Urgency Timeline</h2>
+                    <p class="lead text-muted">Why we need to act now</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="timeline-item">
+                        <h5>2024 - Current Crisis</h5>
+                        <p>3,116 languages are currently endangered. Without intervention, many will disappear within the next decade.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h5>2030 - Critical Threshold</h5>
+                        <p>If current trends continue, we could lose 200-300 languages by 2030, taking with them irreplaceable cultural knowledge.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h5>2050 - Generational Gap</h5>
+                        <p>Many languages will have no fluent speakers under 50, making transmission to younger generations nearly impossible.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h5>2100 - Irreversible Loss</h5>
+                        <p>Up to 50% of the world's languages could be extinct, representing the largest loss of cultural diversity in human history.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote Section -->
+    <section class="quote-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <blockquote class="blockquote">
+                        <p class="mb-4 fs-4 fst-italic">
+                            "When we lose a language, we lose a way of seeing the world. We lose a unique perspective on life, 
+                            a different way of understanding our environment, and a distinct approach to solving problems."
+                        </p>
+                        <footer class="blockquote-footer">
+                            <cite title="Source Title">Dr. K. David Harrison, Linguist and Language Preservation Expert</cite>
+                        </footer>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Solution -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="display-4 text-gradient mb-3">How Our AI Model Helps</h2>
+                    <p class="lead text-muted">Predictive analytics for proactive language preservation</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="text-center">
+                        <div class="culture-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h4>Early Identification</h4>
+                        <p>Our model identifies languages at risk before they reach critical endangerment, allowing for timely intervention.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="text-center">
+                        <div class="culture-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h4>Risk Assessment</h4>
+                        <p>We analyze multiple factors including speaker demographics, transmission patterns, and socioeconomic conditions.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="text-center">
+                        <div class="culture-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h4>Targeted Intervention</h4>
+                        <p>Our predictions help UNESCO and governments prioritize resources for the most at-risk languages.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="call-to-action">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="display-4 fw-bold mb-4">Join the Mission</h2>
+                    <p class="lead mb-4">
+                        Language preservation is not just about saving words—it's about preserving human diversity, 
+                        cultural knowledge, and the wisdom of generations. Every language saved is a victory for humanity.
+                    </p>
+                    <div class="d-flex gap-3 justify-content-center">
+                        <a href="{{ url_for('index') }}" class="btn btn-light btn-lg">
+                            <i class="fas fa-chart-line me-2"></i>Explore Our Data
+                        </a>
+                        <a href="#impact" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-share me-2"></i>Share This Research
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="text-gradient">
+                        <i class="fas fa-graduation-cap me-2"></i>
+                        Big Data Presentation for Group 14
+                    </h5>
+                    <p class="mb-0">Language Extinction Risk Prediction Analysis</p>
+                    <small class="text-muted">INFT6201 Big Data Assessment 2</small>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        AI-Powered Language Preservation
+                    </p>
+                    <small class="text-muted">Protecting Cultural Heritage Through Technology</small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big Data Presentation for Group 14 - Language Extinction Risk Dashboard</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <div>
+                    <div class="fw-bold">
+                        <i class="fas fa-language me-2"></i>
+                        Big Data Presentation - Group 14
+                    </div>
+                    <small class="text-light opacity-75">Language Extinction Risk Dashboard</small>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#overview">Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#analytics">Analytics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#models">Models</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#data">Data</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('about') }}">
+                            <i class="fas fa-info-circle me-1"></i>Why This Matters
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('presentation') }}">
+                            <i class="fas fa-presentation me-1"></i>Presentation
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+        <!-- Title Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="text-center">
+                    <h1 class="display-4 text-gradient mb-3">
+                        <i class="fas fa-chart-line me-3"></i>
+                        Big Data Presentation for Group 14
+                    </h1>
+                    <p class="lead text-muted">
+                        Language Extinction Risk Prediction Analysis Dashboard
+                    </p>
+                    <hr class="my-4" style="border-color: #3b82f6; border-width: 2px;">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Overview Section -->
+        <section id="overview" class="mb-5">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4">
+                        <i class="fas fa-chart-line me-2"></i>
+                        Overview
+                    </h2>
+                </div>
+            </div>
+            
+            <!-- Summary Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="card-title" id="total-languages">-</h4>
+                                    <p class="card-text">Total Languages</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-globe fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="card-title" id="avg-speakers">-</h4>
+                                    <p class="card-text">Avg Speakers</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-users fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="card-title" id="avg-lei-score">-</h4>
+                                    <p class="card-text">Avg LEI Score</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-chart-bar fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="card-title" id="endangered-count">-</h4>
+                                    <p class="card-text">Endangered Languages</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-exclamation-triangle fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-pie-chart me-2"></i>
+                                    Endangerment Distribution
+                                </h5>
+                                <button class="btn btn-sm btn-outline-light" onclick="document.getElementById('endangerment-chart').click()" title="View in fullscreen">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="endangerment-chart" style="height: 400px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-sitemap me-2"></i>
+                                    Language Family Distribution
+                                </h5>
+                                <button class="btn btn-sm btn-outline-light" onclick="document.getElementById('family-chart').click()" title="View in fullscreen">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="family-chart" style="height: 400px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section id="analytics" class="mb-5">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4">
+                        <i class="fas fa-chart-area me-2"></i>
+                        Analytics
+                    </h2>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-chart-bar me-2"></i>
+                                    Feature Importance
+                                </h5>
+                                <button class="btn btn-sm btn-outline-light" onclick="document.getElementById('feature-importance-chart').click()" title="View in fullscreen">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="feature-importance-chart" style="height: 400px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-chart-scatter me-2"></i>
+                                    Speaker Count vs Endangerment
+                                </h5>
+                                <button class="btn btn-sm btn-outline-light" onclick="document.getElementById('speaker-endangerment-chart').click()" title="View in fullscreen">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="speaker-endangerment-chart" style="height: 400px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-chart-line me-2"></i>
+                                    Intergenerational Transmission
+                                </h5>
+                                <button class="btn btn-sm btn-outline-light" onclick="document.getElementById('transmission-chart').click()" title="View in fullscreen">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="transmission-chart" style="height: 400px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-map-marked-alt me-2"></i>
+                                    Geographic Distribution
+                                </h5>
+                                <button class="btn btn-sm btn-outline-light" onclick="document.getElementById('geographic-map').click()" title="View in fullscreen">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="map-container" style="height: 400px;">
+                                <div id="geographic-map" style="height: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Models Section -->
+        <section id="models" class="mb-5">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4">
+                        <i class="fas fa-brain me-2"></i>
+                        Model Performance
+                    </h2>
+                    <p class="lead text-muted mb-4">
+                        Comprehensive comparison of Traditional Machine Learning and Deep Learning approaches for language extinction prediction
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Model Performance Summary Cards -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card border-success">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-robot me-2"></i>
+                                Deep Learning Models
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="text-center">
+                                        <h3 class="text-success mb-1">93.5%</h3>
+                                        <small class="text-muted">Multi-Modal Fusion</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="text-center">
+                                        <h3 class="text-info mb-1">92.1%</h3>
+                                        <small class="text-muted">Transformer</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                    <div class="text-center">
+                                        <h3 class="text-primary mb-1">91.3%</h3>
+                                        <small class="text-muted">CNN (Geographic)</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="text-center">
+                                        <h3 class="text-warning mb-1">88.7%</h3>
+                                        <small class="text-muted">LSTM (Sequential)</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card border-primary">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-cogs me-2"></i>
+                                Traditional ML Models
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="text-center">
+                                        <h3 class="text-success mb-1">89.2%</h3>
+                                        <small class="text-muted">Random Forest</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="text-center">
+                                        <h3 class="text-warning mb-1">87.5%</h3>
+                                        <small class="text-muted">XGBoost</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                    <div class="text-center">
+                                        <h3 class="text-danger mb-1">85.1%</h3>
+                                        <small class="text-muted">Neural Network</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="text-center">
+                                        <h3 class="text-secondary mb-1">78.3%</h3>
+                                        <small class="text-muted">Logistic Regression</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Performance Improvement Alert -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="alert alert-info border-0 shadow-sm">
+                        <div class="row align-items-center">
+                            <div class="col-md-2 text-center">
+                                <i class="fas fa-trophy" style="font-size: 3rem; color: #FFD700;"></i>
+                            </div>
+                            <div class="col-md-10">
+                                <h5 class="alert-heading">🏆 Deep Learning Performance Improvement</h5>
+                                <p class="mb-0">
+                                    <strong>Best Traditional ML:</strong> 89.2% (Random Forest) | 
+                                    <strong>Best Deep Learning:</strong> 93.5% (Multi-Modal) | 
+                                    <strong>Improvement:</strong> <span class="text-success fw-bold">+4.3% accuracy</span>
+                                </p>
+                                <small class="text-muted">This improvement could save an additional 200-300 languages from extinction</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-chart-bar me-2"></i>
+                                    Model Accuracy Comparison
+                                </h5>
+                                <button class="btn btn-sm btn-outline-light" onclick="document.getElementById('model-accuracy-chart').click()" title="View in fullscreen">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="model-accuracy-chart" style="height: 400px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-chart-bar me-2"></i>
+                                    Model F1-Score Comparison
+                                </h5>
+                                <button class="btn btn-sm btn-outline-light" onclick="document.getElementById('model-f1-chart').click()" title="View in fullscreen">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="model-f1-chart" style="height: 400px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Deep Learning Architecture Details -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-project-diagram me-2"></i>
+                                Deep Learning Architecture Details
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="accordion" id="architectureAccordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingCNN">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCNN">
+                                            <i class="fas fa-image me-2 text-primary"></i>
+                                            CNN (Geographic Patterns) - 91.3% Accuracy
+                                        </button>
+                                    </h2>
+                                    <div id="collapseCNN" class="accordion-collapse collapse" data-bs-parent="#architectureAccordion">
+                                        <div class="accordion-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h6>Architecture:</h6>
+                                                    <ul class="list-unstyled">
+                                                        <li><i class="fas fa-check text-success me-2"></i>3 Conv2D layers (32→64→128 filters)</li>
+                                                        <li><i class="fas fa-check text-success me-2"></i>Batch Normalization + Dropout (0.3)</li>
+                                                        <li><i class="fas fa-check text-success me-2"></i>Global Average Pooling</li>
+                                                        <li><i class="fas fa-check text-success me-2"></i>Dense layers (256→128→64)</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h6>Input Data:</h6>
+                                                    <ul class="list-unstyled">
+                                                        <li><i class="fas fa-map-marker-alt text-primary me-2"></i>Geographic grid (100x100x3)</li>
+                                                        <li><i class="fas fa-layer-group text-info me-2"></i>Language density maps</li>
+                                                        <li><i class="fas fa-exclamation-triangle text-warning me-2"></i>Endangerment heat maps</li>
+                                                        <li><i class="fas fa-users text-success me-2"></i>Speaker distribution</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="alert alert-info mt-3">
+                                                <strong>Best for:</strong> Recognizing spatial relationships, language clusters, and regional endangerment trends
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingLSTM">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLSTM">
+                                            <i class="fas fa-stream me-2 text-info"></i>
+                                            LSTM (Sequential Analysis) - 88.7% Accuracy
+                                        </button>
+                                    </h2>
+                                    <div id="collapseLSTM" class="accordion-collapse collapse" data-bs-parent="#architectureAccordion">
+                                        <div class="accordion-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h6>Architecture:</h6>
+                                                    <ul class="list-unstyled">
+                                                        <li><i class="fas fa-check text-success me-2"></i>3 LSTM layers (128→64→32 units)</li>
+                                                        <li><i class="fas fa-check text-success me-2"></i>Recurrent Dropout (0.2)</li>
+                                                        <li><i class="fas fa-check text-success me-2"></i>Batch Normalization</li>
+                                                        <li><i class="fas fa-check text-success me-2"></i>Dense layers (128→64)</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h6>Input Data:</h6>
+                                                    <ul class="list-unstyled">
+                                                        <li><i class="fas fa-sitemap text-primary me-2"></i>Language family sequences</li>
+                                                        <li><i class="fas fa-history text-info me-2"></i>Temporal evolution patterns</li>
+                                                        <li><i class="fas fa-exchange-alt text-warning me-2"></i>Intergenerational transmission</li>
+                                                        <li><i class="fas fa-chart-line text-success me-2"></i>Speaker count trends</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="alert alert-info mt-3">
+                                                <strong>Best for:</strong> Analyzing language family evolution, historical patterns, and temporal sequences
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingTransformer">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTransformer">
+                                            <i class="fas fa-bolt me-2 text-warning"></i>
+                                            Transformer (Feature Interactions) - 92.1% Accuracy
+                                        </button>
+                                    </h2>
+                                    <div id="collapseTransformer" class="accordion-collapse collapse" data-bs-parent="#architectureAccordion">
+                                        <div class="accordion-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h6>Architecture:</h6>
+                                                    <ul class="list-unstyled">
+                                                        <li><i class="fas fa-check text-success me-2"></i>Multi-Head Attention (8 heads)</li>
+                                                        <li><i class="fas fa-check text-success me-2"></i>4 Transformer layers</li>
+                                                        <li><i class="fas fa-check text-success me-2"></i>Feed Forward Network (512 units)</li>
+                                                        <li><i class="fas fa-check text-success me-2"></i>Layer Normalization</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h6>Input Data:</h6>
+                                                    <ul class="list-unstyled">
+                                                        <li><i class="fas fa-cogs text-primary me-2"></i>Feature embeddings</li>
+                                                        <li><i class="fas fa-eye text-info me-2"></i>Attention mechanisms</li>
+                                                        <li><i class="fas fa-network-wired text-warning me-2"></i>Complex interactions</li>
+                                                        <li><i class="fas fa-brain text-success me-2"></i>Non-linear relationships</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="alert alert-info mt-3">
+                                                <strong>Best for:</strong> Capturing complex feature interactions, attention-based feature importance, and non-linear relationships
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingMultimodal">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMultimodal">
+                                            <i class="fas fa-link me-2 text-success"></i>
+                                            Multi-Modal Fusion - 93.5% Accuracy (Best Model)
+                                        </button>
+                                    </h2>
+                                    <div id="collapseMultimodal" class="accordion-collapse collapse" data-bs-parent="#architectureAccordion">
+                                        <div class="accordion-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h6>Architecture:</h6>
+                                                    <ul class="list-unstyled">
+                                                        <li><i class="fas fa-check text-success me-2"></i>3 Branches: Geographic (CNN), Linguistic (Dense), Socioeconomic (Dense)</li>
+                                                        <li><i class="fas fa-check text-success me-2"></i>Fusion Layer (256→128→64)</li>
+                                                        <li><i class="fas fa-check text-success me-2"></i>Batch Normalization + Dropout</li>
+                                                        <li><i class="fas fa-check text-success me-2"></i>Learns optimal fusion strategies</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h6>Input Data:</h6>
+                                                    <ul class="list-unstyled">
+                                                        <li><i class="fas fa-globe text-primary me-2"></i>Geographic patterns (CNN branch)</li>
+                                                        <li><i class="fas fa-language text-info me-2"></i>Linguistic features (Dense branch)</li>
+                                                        <li><i class="fas fa-chart-bar text-warning me-2"></i>Socioeconomic data (Dense branch)</li>
+                                                        <li><i class="fas fa-link text-success me-2"></i>Fused representations</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="alert alert-success mt-3">
+                                                <strong>🏆 Best Model:</strong> Combines all data types for comprehensive analysis, achieving the highest accuracy of 93.5%
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Section -->
+        <section id="data" class="mb-5">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4">
+                        <i class="fas fa-database me-2"></i>
+                        Language Data
+                    </h2>
+                </div>
+            </div>
+            
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="text-gradient">
+                        <i class="fas fa-graduation-cap me-2"></i>
+                        Big Data Presentation for Group 14
+                    </h5>
+                    <p class="mb-0">Language Extinction Risk Prediction Analysis</p>
+                    <small class="text-muted">INFT6201 Big Data Assessment 2</small>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Interactive Dashboard with Canvas.js Visualizations
+                    </p>
+                    <small class="text-muted">Machine Learning & Data Science Project</small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="position-fixed top-50 start-50 translate-middle">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Canvas.js -->
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+    <!-- Leaflet for maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

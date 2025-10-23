@@ -57,6 +57,48 @@ models:
     max_iter: 1000
     class_weight: "balanced"
 
+# Deep Learning configuration
+deep_learning:
+  cnn:
+    filters: [32, 64, 128]
+    kernel_sizes: [3, 3, 3]
+    pool_sizes: [2, 2, 2]
+    dropout_rate: 0.3
+    dense_units: [256, 128, 64]
+    epochs: 50
+    batch_size: 32
+    learning_rate: 0.001
+  
+  lstm:
+    lstm_units: [128, 64, 32]
+    dropout_rate: 0.3
+    recurrent_dropout: 0.2
+    dense_units: [128, 64]
+    epochs: 50
+    batch_size: 32
+    learning_rate: 0.001
+  
+  transformer:
+    num_heads: 8
+    num_layers: 4
+    d_model: 128
+    dff: 512
+    dropout_rate: 0.1
+    max_sequence_length: 100
+    epochs: 50
+    batch_size: 32
+    learning_rate: 0.001
+  
+  multimodal:
+    geographic_branch_units: [64, 32]
+    linguistic_branch_units: [128, 64]
+    socioeconomic_branch_units: [64, 32]
+    fusion_units: [256, 128, 64]
+    dropout_rate: 0.3
+    epochs: 50
+    batch_size: 32
+    learning_rate: 0.001
+
 # Feature engineering
 feature_engineering:
   derived_features:
