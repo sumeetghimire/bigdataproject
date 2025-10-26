@@ -15,6 +15,7 @@ import logging
 from pathlib import Path
 import argparse
 import yaml
+import pandas as pd
 from typing import Dict, Any
 
 # Add src to path for imports
@@ -109,8 +110,15 @@ class LanguageExtinctionPipeline:
         logger.info("Starting data preprocessing pipeline...")
         
         try:
+            # Check if raw data is available in memory
             if self.raw_data is None:
-                raise ValueError("No raw data available. Run data loading first.")
+                # Try to load previously saved processed data
+                processed_data_path = Path('data/processed_language_data.csv')
+                if processed_data_path.exists():
+                    logger.info("Loading previously saved data from processed_language_data.csv")
+                    self.raw_data = pd.read_csv(processed_data_path)
+                else:
+                    raise ValueError("No raw data available. Run data loading first or ensure processed_language_data.csv exists.")
             
             # Preprocess data
             X, y, feature_names = self.preprocessor.preprocess_pipeline(self.raw_data)
@@ -157,7 +165,23 @@ class LanguageExtinctionPipeline:
         
         try:
             if self.processed_data is None:
-                raise ValueError("No processed data available. Run preprocessing first.")
+                # Try to load and preprocess data if not available
+                if self.raw_data is None:
+                    processed_data_path = Path('data/processed_language_data.csv')
+                    if processed_data_path.exists():
+                        logger.info("Loading previously saved data for model training")
+                        self.raw_data = pd.read_csv(processed_data_path)
+                        # Run preprocessing to get processed data
+                        preprocessing_result = self.run_preprocessing()
+                        if preprocessing_result['status'] != 'success':
+                            raise ValueError("Failed to preprocess data for model training")
+                    else:
+                        raise ValueError("No processed data available. Run data loading and preprocessing first.")
+                else:
+                    # Run preprocessing if we have raw data but no processed data
+                    preprocessing_result = self.run_preprocessing()
+                    if preprocessing_result['status'] != 'success':
+                        raise ValueError("Failed to preprocess data for model training")
             
             # Train all models
             model_results = self.predictor.train_all_models(
@@ -210,8 +234,21 @@ class LanguageExtinctionPipeline:
         logger.info("Starting visualization pipeline...")
         
         try:
-            if self.raw_data is None or self.evaluation_results is None:
-                raise ValueError("Required data not available. Run data loading and model training first.")
+            # Check if we have the required data
+            if self.raw_data is None:
+                processed_data_path = Path('data/processed_language_data.csv')
+                if processed_data_path.exists():
+                    logger.info("Loading previously saved data for visualization")
+                    self.raw_data = pd.read_csv(processed_data_path)
+                else:
+                    raise ValueError("No raw data available. Run data loading first.")
+            
+            if self.evaluation_results is None:
+                # Try to run model training if we don't have evaluation results
+                logger.info("No evaluation results found, running model training first")
+                training_result = self.run_model_training()
+                if training_result['status'] != 'success':
+                    raise ValueError("Failed to train models for visualization")
             
             # Get feature importance
             feature_importance = self.predictor.get_feature_importance('random_forest', top_n=15)

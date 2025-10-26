@@ -600,6 +600,55 @@ class LanguageVisualizer:
         fig.write_html(self.viz_dir / "interactive_dashboard.html")
         logger.info("Interactive dashboard saved")
     
+    def create_confusion_matrices_for_all_models(self, model_results: Dict[str, Dict[str, Any]],
+                                                 class_names: List[str]) -> None:
+        """
+        Create comprehensive confusion matrices for all models
+        
+        Args:
+            model_results (Dict[str, Dict[str, Any]]): Model evaluation results
+            class_names (List[str]): List of class names
+        """
+        logger.info("Creating confusion matrices for all models...")
+        
+        # Create combined figure with all confusion matrices
+        fig, axes = plt.subplots(2, 2, figsize=(20, 16))
+        fig.suptitle('Confusion Matrices - All Models', fontsize=18, fontweight='bold')
+        
+        axes = axes.flatten()
+        
+        for idx, (model_name, results) in enumerate(model_results.items()):
+            cm = results['confusion_matrix']
+            
+            # Normalize confusion matrix
+            cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+            
+            # Create heatmap
+            sns.heatmap(cm_normalized, annot=True, fmt='.2%', cmap='Blues',
+                       xticklabels=class_names, yticklabels=class_names,
+                       ax=axes[idx], square=True, linewidths=0.5, linecolor='gray',
+                       cbar_kws={'label': 'Percentage'})
+            
+            # Add accuracy to title
+            accuracy = results['test_accuracy']
+            axes[idx].set_title(f'{model_name.replace("_", " ").title()}\nAccuracy: {accuracy:.2%}',
+                               fontsize=14, fontweight='bold')
+            axes[idx].set_xlabel('Predicted Label', fontsize=11, fontweight='bold')
+            axes[idx].set_ylabel('True Label', fontsize=11, fontweight='bold')
+            
+            # Rotate labels
+            axes[idx].set_xticklabels(axes[idx].get_xticklabels(), rotation=45, ha='right')
+            axes[idx].set_yticklabels(axes[idx].get_yticklabels(), rotation=0)
+        
+        plt.tight_layout()
+        
+        # Save figure
+        save_path = self.viz_dir / "confusion_matrices.png"
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        plt.close()
+        
+        logger.info(f"Confusion matrices saved to {save_path}")
+    
     def create_static_plots(self, df: pd.DataFrame, 
                           model_results: Dict[str, Dict[str, Any]],
                           feature_importance: Dict[str, float]) -> None:
@@ -663,7 +712,10 @@ class LanguageVisualizer:
         # 6. Confusion matrix (if available)
         if model_results and 'random_forest' in model_results:
             cm = model_results['random_forest']['confusion_matrix']
-            sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=axes[1, 2])
+            # Normalize for better visualization
+            cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+            sns.heatmap(cm_normalized, annot=True, fmt='.2%', cmap='Blues', ax=axes[1, 2],
+                       square=True, linewidths=0.5, cbar_kws={'label': 'Percentage'})
             axes[1, 2].set_title('Random Forest Confusion Matrix')
             axes[1, 2].set_xlabel('Predicted')
             axes[1, 2].set_ylabel('Actual')

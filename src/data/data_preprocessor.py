@@ -73,8 +73,8 @@ class LanguageDataPreprocessor:
                 cleaned_df[col] = cleaned_df[col].astype(str).str.strip()
                 cleaned_df[col] = cleaned_df[col].replace('nan', np.nan)
         
-        # Clean numeric columns
-        numeric_columns = ['latitude', 'longitude', 'speaker_count', 'lei_score']
+        # Clean numeric columns (handle different coordinate column names)
+        numeric_columns = ['latitude', 'longitude', 'lat', 'lng', 'speaker_count', 'speakers', 'lei_score']
         for col in numeric_columns:
             if col in cleaned_df.columns:
                 cleaned_df[col] = pd.to_numeric(cleaned_df[col], errors='coerce')
@@ -97,7 +97,13 @@ class LanguageDataPreprocessor:
         df_enhanced = df.copy()
         
         # 1. Speaker Density (speakers per square km)
-        if 'speaker_count' in df_enhanced.columns:
+        speaker_col = None
+        for col in ['speaker_count', 'speakers']:
+            if col in df_enhanced.columns:
+                speaker_col = col
+                break
+                
+        if speaker_col:
             # Assume language area based on country size (simplified)
             country_areas = {
                 'USA': 9834000, 'India': 3287000, 'Australia': 7692000,
@@ -106,7 +112,7 @@ class LanguageDataPreprocessor:
             }
             
             df_enhanced['country_area'] = df_enhanced['country'].map(country_areas)
-            df_enhanced['speaker_density'] = df_enhanced['speaker_count'] / df_enhanced['country_area']
+            df_enhanced['speaker_density'] = df_enhanced[speaker_col] / df_enhanced['country_area']
             df_enhanced['speaker_density'] = df_enhanced['speaker_density'].fillna(0)
         
         # 2. Transmission Rate (if we have children speakers data)
@@ -115,7 +121,19 @@ class LanguageDataPreprocessor:
             df_enhanced['transmission_rate'] = df_enhanced['intergenerational_transmission'] / 4.0
         
         # 3. Geographic Isolation Index
-        if all(col in df_enhanced.columns for col in ['latitude', 'longitude']):
+        # Handle different coordinate column names
+        lat_col = None
+        lng_col = None
+        for lat_name in ['latitude', 'lat']:
+            if lat_name in df_enhanced.columns:
+                lat_col = lat_name
+                break
+        for lng_name in ['longitude', 'lng']:
+            if lng_name in df_enhanced.columns:
+                lng_col = lng_name
+                break
+                
+        if lat_col and lng_col:
             # Calculate distance to nearest major city (simplified)
             major_cities = {
                 'New York': (40.7128, -74.0060),
@@ -136,7 +154,7 @@ class LanguageDataPreprocessor:
                 return min_dist
             
             df_enhanced['distance_to_city'] = df_enhanced.apply(
-                lambda row: calculate_min_distance_to_city(row['latitude'], row['longitude']), 
+                lambda row: calculate_min_distance_to_city(row[lat_col], row[lng_col]), 
                 axis=1
             )
             df_enhanced['geographic_isolation_index'] = df_enhanced['distance_to_city']
@@ -165,9 +183,9 @@ class LanguageDataPreprocessor:
             df_enhanced['language_family_risk'] = df_enhanced['family_id'].map(family_risk)
         
         # 7. Interaction Features
-        if all(col in df_enhanced.columns for col in ['speaker_count', 'transmission_rate']):
+        if speaker_col and 'transmission_rate' in df_enhanced.columns:
             df_enhanced['speakers_x_transmission'] = (
-                df_enhanced['speaker_count'] * df_enhanced['transmission_rate']
+                df_enhanced[speaker_col] * df_enhanced['transmission_rate']
             )
         
         if all(col in df_enhanced.columns for col in ['years_of_schooling', 'official_language_status']):
@@ -198,7 +216,15 @@ class LanguageDataPreprocessor:
         df_target = df.copy()
         
         # Create endangerment level based on available data
-        if 'lei_score' in df_target.columns:
+        if 'endangerment' in df_target.columns:
+            # Use existing endangerment column (from real_language_data.csv)
+            df_target['endangerment_level'] = df_target['endangerment'].str.strip()
+            
+        elif 'endangerment_level' in df_target.columns:
+            # Already exists, just clean it
+            df_target['endangerment_level'] = df_target['endangerment_level'].str.strip()
+            
+        elif 'lei_score' in df_target.columns:
             # Use LEI score to create endangerment levels
             def lei_to_endangerment(score):
                 if pd.isna(score):
@@ -220,37 +246,49 @@ class LanguageDataPreprocessor:
         
         elif 'aes' in df_target.columns:
             # Use AES scale
-            aes_mapping = {1: 'Safe', 2: 'Vulnerable', 3: 'Definitely Endangered', 
-                          4: 'Severely Endangered', 5: 'Critically Endangered'}
+            aes_mapping = {0: 'Safe', 1: 'Vulnerable', 2: 'Definitely Endangered', 
+                          3: 'Severely Endangered', 4: 'Critically Endangered', 5: 'Extinct'}
             df_target['endangerment_level'] = df_target['aes'].map(aes_mapping)
-        
-        elif 'endangerment_level' in df_target.columns:
-            # Already exists, just clean it
-            df_target['endangerment_level'] = df_target['endangerment_level'].str.strip()
         
         else:
             # Create based on speaker count (fallback)
-            def speaker_to_endangerment(count):
-                if pd.isna(count):
-                    return 'Unknown'
-                elif count >= 10000:
-                    return 'Safe'
-                elif count >= 1000:
-                    return 'Vulnerable'
-                elif count >= 100:
-                    return 'Definitely Endangered'
-                elif count >= 10:
-                    return 'Severely Endangered'
-                else:
-                    return 'Critically Endangered'
+            speaker_col = None
+            for col in ['speakers', 'speaker_count']:
+                if col in df_target.columns:
+                    speaker_col = col
+                    break
             
-            df_target['endangerment_level'] = df_target['speaker_count'].apply(speaker_to_endangerment)
+            if speaker_col:
+                def speaker_to_endangerment(count):
+                    if pd.isna(count):
+                        return 'Unknown'
+                    elif count >= 10000:
+                        return 'Safe'
+                    elif count >= 1000:
+                        return 'Vulnerable'
+                    elif count >= 100:
+                        return 'Definitely Endangered'
+                    elif count >= 10:
+                        return 'Severely Endangered'
+                    else:
+                        return 'Critically Endangered'
+                
+                df_target['endangerment_level'] = df_target[speaker_col].apply(speaker_to_endangerment)
+            else:
+                logger.error("No suitable column found to create endangerment target")
+                raise ValueError("Cannot create endangerment target: no suitable columns found")
         
         # Remove unknown endangerment levels for training
+        initial_count = len(df_target)
         df_target = df_target[df_target['endangerment_level'] != 'Unknown']
+        df_target = df_target.dropna(subset=['endangerment_level'])
         
+        logger.info(f"Removed {initial_count - len(df_target)} rows with unknown/missing endangerment levels")
         logger.info(f"Endangerment level distribution:")
-        logger.info(df_target['endangerment_level'].value_counts().to_string())
+        if len(df_target) > 0:
+            logger.info(df_target['endangerment_level'].value_counts().to_string())
+        else:
+            logger.error("No valid endangerment data remaining after filtering!")
         
         return df_target
     
@@ -275,22 +313,18 @@ class LanguageDataPreprocessor:
         if self.target_column in categorical_columns:
             categorical_columns.remove(self.target_column)
         
-        # Encode each categorical column
+        # Encode each categorical column using label encoding for simplicity
         for col in categorical_columns:
             if col in df_encoded.columns:
-                # Use label encoding for ordinal categories
-                if col in ['speaker_trend', 'intergenerational_transmission']:
+                try:
                     le = LabelEncoder()
-                    df_encoded[col + '_encoded'] = le.fit_transform(df_encoded[col].astype(str))
+                    df_encoded[col + '_encoded'] = le.fit_transform(df_encoded[col].astype(str).fillna('Unknown'))
                     self.label_encoders[col] = le
-                else:
-                    # Use one-hot encoding for nominal categories
-                    ohe = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
-                    encoded_cols = ohe.fit_transform(df_encoded[[col]].fillna('Unknown'))
-                    feature_names = [f"{col}_{cat}" for cat in ohe.categories_[0]]
-                    encoded_df = pd.DataFrame(encoded_cols, columns=feature_names, index=df_encoded.index)
-                    df_encoded = pd.concat([df_encoded, encoded_df], axis=1)
-                    self.onehot_encoders[col] = ohe
+                    logger.debug(f"Label encoded column {col}")
+                except Exception as e:
+                    logger.warning(f"Failed to encode column {col}: {str(e)}")
+                    # Skip this column if encoding fails
+                    continue
         
         logger.info(f"Encoded {len(categorical_columns)} categorical features")
         return df_encoded
@@ -315,9 +349,29 @@ class LanguageDataPreprocessor:
         
         # Impute numeric columns
         if numeric_columns:
-            numeric_imputer = KNNImputer(n_neighbors=5)
-            df_imputed[numeric_columns] = numeric_imputer.fit_transform(df_imputed[numeric_columns])
-            self.imputers['numeric'] = numeric_imputer
+            try:
+                # Filter out any columns that might have been corrupted
+                valid_numeric_columns = [col for col in numeric_columns if col in df_imputed.columns]
+                if valid_numeric_columns:
+                    numeric_imputer = KNNImputer(n_neighbors=5)
+                    imputed_values = numeric_imputer.fit_transform(df_imputed[valid_numeric_columns])
+                    df_imputed[valid_numeric_columns] = imputed_values
+                    self.imputers['numeric'] = numeric_imputer
+            except Exception as e:
+                logger.warning(f"KNN imputation failed: {str(e)}, using simple imputation")
+                # Fallback to simple imputation
+                try:
+                    valid_numeric_columns = [col for col in numeric_columns if col in df_imputed.columns]
+                    if valid_numeric_columns:
+                        numeric_imputer = SimpleImputer(strategy='median')
+                        imputed_values = numeric_imputer.fit_transform(df_imputed[valid_numeric_columns])
+                        df_imputed[valid_numeric_columns] = imputed_values
+                        self.imputers['numeric'] = numeric_imputer
+                except Exception as e2:
+                    logger.error(f"All imputation methods failed: {str(e2)}")
+                    # Fill NaN values with 0 as last resort
+                    for col in valid_numeric_columns:
+                        df_imputed[col] = df_imputed[col].fillna(0)
         
         # Impute categorical columns
         for col in categorical_columns:
@@ -358,6 +412,14 @@ class LanguageDataPreprocessor:
         X = df[feature_columns].copy()
         y = df[self.target_column].copy()
         
+        # Encode target variable to numeric labels for ML models
+        if y.dtype == 'object':
+            target_encoder = LabelEncoder()
+            y_encoded = target_encoder.fit_transform(y)
+            self.target_encoder = target_encoder
+            logger.info(f"Encoded target variable. Classes: {target_encoder.classes_}")
+            y = pd.Series(y_encoded, index=y.index, name=self.target_column)
+        
         # Store feature names
         self.feature_names = feature_columns
         
@@ -396,10 +458,18 @@ class LanguageDataPreprocessor:
         # Step 6: Prepare features and target
         X, y, feature_names = self.prepare_features_and_target(df_imputed)
         
+        # Final check: ensure no NaN values remain in features
+        if X.isnull().any().any():
+            logger.warning("NaN values detected in features, filling with 0")
+            X = X.fillna(0)
+        
         # Store processed data
         self.processed_data = df_imputed
         
         logger.info("Preprocessing pipeline completed successfully")
+        logger.info(f"Final feature matrix shape: {X.shape}")
+        logger.info(f"NaN values in features: {X.isnull().sum().sum()}")
+        
         return X, y, feature_names
     
     def split_data(self, X: pd.DataFrame, y: pd.Series, test_size: float = 0.2, random_state: int = 42) -> Tuple:

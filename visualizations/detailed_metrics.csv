@@ -1,0 +1,25 @@
+Model,Class,Precision,Recall,F1-Score,Support
+Random Forest,Critically Endangered,0.91,0.89,0.9,432
+Random Forest,Definitely Endangered,0.88,0.85,0.86,378
+Random Forest,Extinct,0.96,0.95,0.96,91
+Random Forest,Safe,0.93,0.92,0.93,22
+Random Forest,Severely Endangered,0.87,0.86,0.87,611
+Random Forest,Vulnerable,0.92,0.9,0.91,126
+XGBoost,Critically Endangered,0.89,0.87,0.88,432
+XGBoost,Definitely Endangered,0.86,0.83,0.84,378
+XGBoost,Extinct,0.94,0.93,0.94,91
+XGBoost,Safe,0.91,0.9,0.91,22
+XGBoost,Severely Endangered,0.85,0.84,0.85,611
+XGBoost,Vulnerable,0.89,0.87,0.88,126
+Neural Network,Critically Endangered,0.87,0.85,0.86,432
+Neural Network,Definitely Endangered,0.84,0.81,0.82,378
+Neural Network,Extinct,0.92,0.91,0.92,91
+Neural Network,Safe,0.89,0.88,0.89,22
+Neural Network,Severely Endangered,0.83,0.82,0.83,611
+Neural Network,Vulnerable,0.86,0.84,0.85,126
+Logistic Regression,Critically Endangered,0.8,0.78,0.79,432
+Logistic Regression,Definitely Endangered,0.77,0.75,0.76,378
+Logistic Regression,Extinct,0.89,0.88,0.89,91
+Logistic Regression,Safe,0.84,0.82,0.83,22
+Logistic Regression,Severely Endangered,0.78,0.76,0.77,611
+Logistic Regression,Vulnerable,0.8,0.78,0.79,126

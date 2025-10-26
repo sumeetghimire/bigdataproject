@@ -53,8 +53,23 @@ class LanguageDataLoader:
         """
         logger.info("Loading Glottolog data...")
         
-        # For demonstration, we'll create a sample dataset
-        # In practice, you would download from the actual URLs
+        # Try to load actual data files in order of preference
+        data_files = [
+            self.data_dir / 'glottolog_language_data.csv',
+            self.data_dir / 'real_language_data.csv',
+            self.data_dir / 'enhanced_sample_data.csv'
+        ]
+        
+        for data_file in data_files:
+            if data_file.exists():
+                logger.info(f"Loading Glottolog data from {data_file}")
+                df = pd.read_csv(data_file)
+                self.datasets['glottolog'] = df
+                logger.info(f"Loaded Glottolog data: {len(df)} records")
+                return df
+        
+        # Fallback to sample data if no files found
+        logger.warning("No Glottolog data files found, creating sample data")
         sample_data = {
             'glottocode': ['abcd1234', 'efgh5678', 'ijkl9012', 'mnop3456', 'qrst7890'],
             'name': ['Sample Language 1', 'Sample Language 2', 'Sample Language 3', 
@@ -136,7 +151,17 @@ class LanguageDataLoader:
         """
         logger.info("Loading Our World in Data...")
         
-        # Sample OWiD data
+        # Try to load actual Our World in Data file
+        owid_file = self.data_dir / 'our_world_in_data.csv'
+        if owid_file.exists():
+            logger.info(f"Loading Our World in Data from {owid_file}")
+            df = pd.read_csv(owid_file)
+            self.datasets['our_world_in_data'] = df
+            logger.info(f"Loaded Our World in Data: {len(df)} records")
+            return df
+        
+        # Fallback to sample data
+        logger.warning("No Our World in Data file found, creating sample data")
         sample_data = {
             'country': ['USA', 'India', 'Australia', 'Brazil', 'Russia', 'China', 'Nigeria', 'Mexico'],
             'total_languages': [420, 453, 123, 289, 105, 301, 524, 186],
@@ -159,7 +184,17 @@ class LanguageDataLoader:
         """
         logger.info("Loading Kaggle data...")
         
-        # Sample Kaggle data
+        # Try to load actual Kaggle data file
+        kaggle_file = self.data_dir / 'kaggle_extinct_languages.csv'
+        if kaggle_file.exists():
+            logger.info(f"Loading Kaggle data from {kaggle_file}")
+            df = pd.read_csv(kaggle_file)
+            self.datasets['kaggle'] = df
+            logger.info(f"Loaded Kaggle data: {len(df)} records")
+            return df
+        
+        # Fallback to sample data
+        logger.warning("No Kaggle data file found, creating sample data")
         sample_data = {
             'name': ['Kaggle Language 1', 'Kaggle Language 2', 'Kaggle Language 3', 
                     'Kaggle Language 4', 'Kaggle Language 5'],
@@ -230,6 +265,18 @@ class LanguageDataLoader:
         if not self.datasets:
             self.load_all_datasets()
         
+        # Check if we loaded a comprehensive dataset that already has all features
+        if 'glottolog' in self.datasets:
+            glottolog_df = self.datasets['glottolog']
+            
+            # If the glottolog dataset already has endangerment information, use it as is
+            if 'endangerment' in glottolog_df.columns or 'endangerment_level' in glottolog_df.columns:
+                logger.info("Using comprehensive dataset as-is (already contains all features)")
+                self.merged_data = glottolog_df.copy()
+                logger.info(f"Merged dataset shape: {self.merged_data.shape}")
+                return self.merged_data
+        
+        # Otherwise, merge datasets as before
         # Start with Glottolog as base dataset
         merged = self.datasets['glottolog'].copy()
         
