@@ -84,7 +84,8 @@ class LanguageDashboard {
                 this.loadFeatureImportanceChart(),
                 this.loadSpeakerEndangermentChart(),
                 this.loadTransmissionChart(),
-                this.loadModelCharts()
+                this.loadModelCharts(),
+                this.loadExtinctionTimeline()
             ]);
         } catch (error) {
             console.error('Error loading charts:', error);
@@ -410,6 +411,83 @@ class LanguageDashboard {
         } catch (error) {
             console.error('Error loading model charts:', error);
         }
+    }
+
+    async loadExtinctionTimeline() {
+        try {
+            const response = await fetch('/api/data/extinction-timeline');
+            const data = await response.json();
+            
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            // Create timeline chart
+            const timelineChart = new CanvasJS.Chart("extinction-timeline-chart", {
+                animationEnabled: true,
+                theme: "light2",
+                title: {
+                    text: "Predicted Language Extinctions by Year"
+                },
+                axisY: {
+                    title: "Number of Languages",
+                    minimum: 0
+                },
+                axisX: {
+                    title: "Year",
+                    interval: 2
+                },
+                data: [{
+                    type: "column",
+                    dataPoints: data.map(item => ({
+                        label: item.year.toString(),
+                        y: item.count,
+                        color: item.color,
+                        toolTipContent: `<strong>Year ${item.year}</strong><br/>Languages at risk: ${item.count}<br/>Total predicted: ${item.total_languages}`
+                    }))
+                }]
+            });
+            
+            timelineChart.render();
+            this.charts.extinctionTimeline = timelineChart;
+
+            // Add click handler for timeline chart
+            this.addFullscreenHandler("extinction-timeline-chart", "Language Extinction Timeline", 
+                data.map(item => ({label: item.year.toString(), y: item.count, color: item.color})), 
+                "column", {
+                    yAxisTitle: "Number of Languages",
+                    yAxisMin: 0
+                });
+
+            // Populate timeline table
+            this.populateTimelineTable(data);
+            
+        } catch (error) {
+            console.error('Error loading extinction timeline:', error);
+        }
+    }
+
+    populateTimelineTable(timelineData) {
+        const tableBody = document.getElementById('extinction-timeline-table').querySelector('tbody');
+        tableBody.innerHTML = '';
+
+        // Sort by year and show most critical years first
+        const sortedData = timelineData.sort((a, b) => a.year - b.year);
+        
+        sortedData.forEach(yearData => {
+            yearData.languages.forEach(language => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><span class="badge" style="background-color: ${yearData.color}">${yearData.year}</span></td>
+                    <td><strong>${language.language_name}</strong></td>
+                    <td>${language.country}</td>
+                    <td>${language.speaker_count.toLocaleString()}</td>
+                    <td><span class="badge bg-warning">${language.endangerment_level}</span></td>
+                    <td><span class="badge bg-danger">${language.probability}%</span></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        });
     }
 
     async loadMap() {

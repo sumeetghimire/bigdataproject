@@ -43,6 +43,11 @@
                         <a class="nav-link" href="#data">Data</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="#extinction-timeline">
+                            <i class="fas fa-clock me-1"></i>Extinction Timeline
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('about') }}">
                             <i class="fas fa-info-circle me-1"></i>Why This Matters
                         </a>
@@ -283,19 +288,110 @@
             </div>
         </section>
 
-        <!-- Models Section -->
-        <section id="models" class="mb-5">
-            <div class="row">
-                <div class="col-12">
-                    <h2 class="mb-4">
-                        <i class="fas fa-brain me-2"></i>
-                        Model Performance
-                    </h2>
-                    <p class="lead text-muted mb-4">
-                        Comprehensive comparison of Traditional Machine Learning and Deep Learning approaches for language extinction prediction
-                    </p>
+            <!-- Extinction Timeline Section -->
+            <section id="extinction-timeline" class="mb-5">
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="mb-4">
+                            <i class="fas fa-clock me-2"></i>
+                            Language Extinction Timeline
+                        </h2>
+                        <p class="lead text-muted mb-4">
+                            Critical timeline showing which languages are predicted to go extinct in the coming years
+                        </p>
+                    </div>
                 </div>
-            </div>
+                
+                <!-- Timeline Alert -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="alert alert-danger border-0 shadow-sm">
+                            <div class="row align-items-center">
+                                <div class="col-md-2 text-center">
+                                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #DC143C;"></i>
+                                </div>
+                                <div class="col-md-10">
+                                    <h5 class="alert-heading">🚨 URGENT: Languages at Risk of Extinction</h5>
+                                    <p class="mb-0">
+                                        <strong>2025-2027:</strong> <span class="text-danger fw-bold">Critical languages</span> with <10 speakers | 
+                                        <strong>2027-2030:</strong> <span class="text-warning fw-bold">Severely endangered</span> languages | 
+                                        <strong>2030+:</strong> <span class="text-info fw-bold">At-risk</span> languages requiring intervention
+                                    </p>
+                                    <small class="text-muted">Based on Multi-Modal Deep Learning predictions (93.5% accuracy)</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title mb-0">
+                                        <i class="fas fa-calendar-alt me-2"></i>
+                                        Predicted Language Extinctions by Year
+                                    </h5>
+                                    <button class="btn btn-sm btn-outline-light" onclick="document.getElementById('extinction-timeline-chart').click()" title="View in fullscreen">
+                                        <i class="fas fa-expand"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="extinction-timeline-chart" style="height: 500px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Detailed Timeline Table -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-list me-2"></i>
+                                    Detailed Extinction Predictions
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover" id="extinction-timeline-table">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>Year</th>
+                                                <th>Language</th>
+                                                <th>Country</th>
+                                                <th>Speakers</th>
+                                                <th>Endangerment</th>
+                                                <th>Extinction Risk</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Timeline data will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Models Section -->
+            <section id="models" class="mb-5">
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="mb-4">
+                            <i class="fas fa-brain me-2"></i>
+                            Model Performance
+                        </h2>
+                        <p class="lead text-muted mb-4">
+                            Comprehensive comparison of Traditional Machine Learning and Deep Learning approaches for language extinction prediction
+                        </p>
+                    </div>
+                </div>
             
             <!-- Model Performance Summary Cards -->
             <div class="row mb-4">

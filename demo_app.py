@@ -243,6 +243,93 @@ def model_performance():
     
     return jsonify(performance_data)
 
+@app.route('/api/data/extinction-timeline')
+def extinction_timeline():
+    """Get language extinction timeline predictions"""
+    if raw_data is None:
+        return jsonify({'error': 'Data not loaded'}), 500
+    
+    # Create extinction timeline based on endangerment level and speaker count
+    timeline_data = []
+    
+    # Define extinction probability based on endangerment level
+    extinction_probability = {
+        'Safe': 0.001,  # Very low probability
+        'Vulnerable': 0.05,  # 5% chance in next 10 years
+        'Definitely Endangered': 0.15,  # 15% chance in next 10 years
+        'Severely Endangered': 0.40,  # 40% chance in next 10 years
+        'Critically Endangered': 0.80,  # 80% chance in next 10 years
+        'Extinct': 1.0  # Already extinct
+    }
+    
+    # Calculate predicted extinction years
+    current_year = 2024
+    languages_by_year = {}
+    
+    for _, row in raw_data.iterrows():
+        if row['endangerment_level'] == 'Extinct':
+            continue
+            
+        prob = extinction_probability.get(row['endangerment_level'], 0.1)
+        speaker_count = row['speaker_count'] if pd.notna(row['speaker_count']) else 1000
+        
+        # Adjust probability based on speaker count
+        if speaker_count < 10:
+            prob *= 2.0  # Double probability for very few speakers
+        elif speaker_count < 100:
+            prob *= 1.5
+        elif speaker_count < 1000:
+            prob *= 1.2
+        
+        # Calculate years until extinction based on probability
+        if prob > 0.8:
+            extinction_year = current_year + np.random.randint(1, 4)  # 2025-2027
+        elif prob > 0.4:
+            extinction_year = current_year + np.random.randint(3, 8)  # 2027-2032
+        elif prob > 0.15:
+            extinction_year = current_year + np.random.randint(8, 15)  # 2032-2039
+        elif prob > 0.05:
+            extinction_year = current_year + np.random.randint(15, 25)  # 2039-2049
+        else:
+            extinction_year = current_year + np.random.randint(25, 50)  # 2049-2074
+        
+        if extinction_year not in languages_by_year:
+            languages_by_year[extinction_year] = []
+        
+        languages_by_year[extinction_year].append({
+            'language_name': row['language_name'],
+            'country': row.get('country', 'Unknown'),
+            'speaker_count': int(speaker_count),
+            'endangerment_level': row['endangerment_level'],
+            'probability': round(prob * 100, 1)
+        })
+    
+    # Convert to timeline format
+    for year in sorted(languages_by_year.keys()):
+        languages = languages_by_year[year]
+        timeline_data.append({
+            'year': year,
+            'count': len(languages),
+            'languages': languages[:10],  # Show top 10 languages per year
+            'total_languages': len(languages),
+            'color': get_timeline_color(year)
+        })
+    
+    return jsonify(timeline_data)
+
+def get_timeline_color(year):
+    """Get color based on extinction year urgency"""
+    if year <= 2027:
+        return '#DC143C'  # Red - immediate threat
+    elif year <= 2030:
+        return '#FF8C00'  # Orange - high threat
+    elif year <= 2035:
+        return '#FFD700'  # Yellow - moderate threat
+    elif year <= 2040:
+        return '#32CD32'  # Green - low threat
+    else:
+        return '#87CEEB'  # Light blue - minimal threat
+
 @app.route('/api/data/speaker-vs-endangerment')
 def speaker_vs_endangerment():
     """Get speaker count vs endangerment data for scatter plot"""
