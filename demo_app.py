@@ -273,22 +273,25 @@ def extinction_timeline():
         prob = extinction_probability.get(row['endangerment_level'], 0.1)
         speaker_count = row['speaker_count'] if pd.notna(row['speaker_count']) else 1000
         
-        # Adjust probability based on speaker count
+        # Adjust probability based on speaker count (cap at 100%)
         if speaker_count < 10:
-            prob *= 2.0  # Double probability for very few speakers
+            prob *= 1.2  # Increase risk for very few speakers
         elif speaker_count < 100:
-            prob *= 1.5
+            prob *= 1.1
         elif speaker_count < 1000:
-            prob *= 1.2
+            prob *= 1.05
+        
+        # Cap probability at 100%
+        prob = min(prob, 1.0)
         
         # Calculate years until extinction based on probability
-        if prob > 0.8:
+        if prob >= 0.8:
             extinction_year = current_year + np.random.randint(1, 4)  # 2025-2027
-        elif prob > 0.4:
+        elif prob >= 0.4:
             extinction_year = current_year + np.random.randint(3, 8)  # 2027-2032
-        elif prob > 0.15:
+        elif prob >= 0.15:
             extinction_year = current_year + np.random.randint(8, 15)  # 2032-2039
-        elif prob > 0.05:
+        elif prob >= 0.05:
             extinction_year = current_year + np.random.randint(15, 25)  # 2039-2049
         else:
             extinction_year = current_year + np.random.randint(25, 50)  # 2049-2074
